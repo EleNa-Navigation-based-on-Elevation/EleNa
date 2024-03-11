@@ -1,6 +1,6 @@
 import json
 import sys
-sys.path.insert(0, "/Users/prathim/Documents/SE/new-code/EleNa-project/src")
+#sys.path.insert(0, "/Users/prathim/Documents/SE/new-code/EleNa-project/src")
 
 import googlemaps
 from flask import Flask, request, render_template
