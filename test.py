@@ -175,41 +175,42 @@ class Test(unittest.TestCase):
         self.assertLessEqual(json_output['elevation_path_distance'], 1)
         self.assertEqual(json_output['elevation_path_gain'], 0)
 
-    def test_no_valid_path_due_to_terrain_constraints(self):
-        # Set up a terrain map with impassable obstacles or extreme elevation changes
-        # For example, you can create a simple grid-based terrain where some cells are impassable
-        terrain_map = [
-            [1, 0, 1, 1, 1],
-            [1, 0, 1, 0, 1],
-            [1, 1, 1, 0, 1],
-            [0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1]
-        ]
-        
-        # Set the start and destination points
-        start = (0, 0)
-        destination = (4, 4)
-        
-        # Set up the controller with the terrain map
-        path_limit = 30
-        elevation = 'max'
-        controller = AStarController()
-        notificationHandler = NotificationHandler()
-        model = Model(terrain_map)  # Pass the terrain map to the model
-        model.add_observer(notificationHandler)
-        controller.set_route_model(model)
-        controller.set_start_location(start)
-        controller.set_end_location(destination)
-        controller.set_path_limit(path_limit)
-        controller.set_elevation_strategy(elevation)
-        
-        # Run the algorithm
-        controller.manipulate_route_model()
-        
-        # Ensure the algorithm indicates the absence of a valid path
-        json_output = json.loads(notificationHandler.get_output_json())
-        self.assertIsNone(json_output['elevation_path_distance'])
-        self.assertIsNone(json_output['elevation_path_gain'])
+def test_no_valid_path_due_to_terrain_constraints(self):
+    # Set up a terrain map with impassable obstacles or extreme elevation changes
+    # For example, you can create a simple grid-based terrain where some cells are impassable
+    terrain_map = [
+        [1, 0, 1, 1, 1],
+        [1, 0, 1, 0, 1],
+        [1, 1, 1, 0, 1],
+        [0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1]
+    ]
+    
+    # Set the start and destination points
+    start = (0, 0)
+    destination = (4, 4)
+    
+    # Set up the controller with the terrain map
+    path_limit = 30
+    elevation = 'max'
+    controller = AStarController()
+    notificationHandler = NotificationHandler()
+    model = Model()  # Do not pass the terrain map argument
+    model.add_observer(notificationHandler)
+    controller.set_route_model(model)
+    controller.set_start_location(start)
+    controller.set_end_location(destination)
+    controller.set_path_limit(path_limit)
+    controller.set_elevation_strategy(elevation)
+    
+    # Run the algorithm
+    controller.manipulate_route_model()
+    
+    # Ensure the algorithm indicates the absence of a valid path
+    json_output = json.loads(notificationHandler.get_output_json())
+    self.assertIsNone(json_output['elevation_path_distance'])
+    self.assertIsNone(json_output['elevation_path_gain'])
+
 
     # Checking the MVC architecture - Astar controller to Model
     def test_model_controller_astar(self):
