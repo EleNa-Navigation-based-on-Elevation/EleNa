@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
     def test_coordinates_from_address(self):
         lat_long = (44.570286100000004, -123.27921585)
         address = get_address_from_lat_long(lat_long)
-        assert'2510, NORTHWEST VAN BUREN AVENUE, CORVALLIS,BENTON COUNTY, OREGON, 97331, UNITED STATES, 97331' ;address.upper()
+        assert '2510, NORTHWEST VAN BUREN AVENUE, CORVALLIS,BENTON COUNTY, OREGON, 97331, UNITED STATES, 97331' ;address.upper()
 
     # Checking if the astar path has less elevation than the shortest path
     def test_astar_short_path(self):
@@ -134,6 +134,7 @@ class Test(unittest.TestCase):
         invalid_lat_long = (200, 200)  # Invalid coordinates
         actual_address = get_address_from_lat_long(invalid_lat_long)
         self.assertIsNone(actual_address)
+
     def test_same_start_and_destination(self):
         start = (44.5702861, -123.27921585)
         destination = (44.5702861, -123.27921585)
@@ -153,62 +154,62 @@ class Test(unittest.TestCase):
         self.assertEqual(json_output['elevation_path_distance'], 0)
         self.assertEqual(json_output['elevation_path_gain'], 0)
 
-def test_very_close_start_and_destination(self):
-    # Test case when start and destination points are very close
-    start = (44.5702861, -123.27921585)
-    destination = (44.5702862, -123.27921586)  # Slightly offset from start
-    path_limit = 30
-    elevation = 'max'
-    controller = AStarController()
-    notificationHandler = NotificationHandler()
-    model = Model()
-    model.add_observer(notificationHandler)
-    controller.set_route_model(model)
-    controller.set_start_location(start)
-    controller.set_end_location(destination)
-    controller.set_path_limit(path_limit)
-    controller.set_elevation_strategy(elevation)
-    controller.manipulate_route_model()
-    json_output = json.loads(notificationHandler.get_output_json())
-    # Ensure the path is very short, perhaps even empty
-    self.assertLessEqual(json_output['elevation_path_distance'], 1)
-    self.assertEqual(json_output['elevation_path_gain'], 0)
+    def test_very_close_start_and_destination(self):
+        # Test case when start and destination points are very close
+        start = (44.5702861, -123.27921585)
+        destination = (44.5702862, -123.27921586)  # Slightly offset from start
+        path_limit = 30
+        elevation = 'max'
+        controller = AStarController()
+        notificationHandler = NotificationHandler()
+        model = Model()
+        model.add_observer(notificationHandler)
+        controller.set_route_model(model)
+        controller.set_start_location(start)
+        controller.set_end_location(destination)
+        controller.set_path_limit(path_limit)
+        controller.set_elevation_strategy(elevation)
+        controller.manipulate_route_model()
+        json_output = json.loads(notificationHandler.get_output_json())
+        # Ensure the path is very short, perhaps even empty
+        self.assertLessEqual(json_output['elevation_path_distance'], 1)
+        self.assertEqual(json_output['elevation_path_gain'], 0)
 
-def test_no_valid_path_due_to_terrain_constraints(self):
-    # Set up a terrain map with impassable obstacles or extreme elevation changes
-    # For example, you can create a simple grid-based terrain where some cells are impassable
-    terrain_map = [
-        [1, 0, 1, 1, 1],
-        [1, 0, 1, 0, 1],
-        [1, 1, 1, 0, 1],
-        [0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1]
-    ]
-    
-    # Set the start and destination points
-    start = (0, 0)
-    destination = (4, 4)
-    
-    # Set up the controller with the terrain map
-    path_limit = 30
-    elevation = 'max'
-    controller = AStarController()
-    notificationHandler = NotificationHandler()
-    model = Model(terrain_map)  # Pass the terrain map to the model
-    model.add_observer(notificationHandler)
-    controller.set_route_model(model)
-    controller.set_start_location(start)
-    controller.set_end_location(destination)
-    controller.set_path_limit(path_limit)
-    controller.set_elevation_strategy(elevation)
-    
-    # Run the algorithm
-    controller.manipulate_route_model()
-    
-    # Ensure the algorithm indicates the absence of a valid path
-    json_output = json.loads(notificationHandler.get_output_json())
-    self.assertIsNone(json_output['elevation_path_distance'])
-    self.assertIsNone(json_output['elevation_path_gain'])
+    def test_no_valid_path_due_to_terrain_constraints(self):
+        # Set up a terrain map with impassable obstacles or extreme elevation changes
+        # For example, you can create a simple grid-based terrain where some cells are impassable
+        terrain_map = [
+            [1, 0, 1, 1, 1],
+            [1, 0, 1, 0, 1],
+            [1, 1, 1, 0, 1],
+            [0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1]
+        ]
+        
+        # Set the start and destination points
+        start = (0, 0)
+        destination = (4, 4)
+        
+        # Set up the controller with the terrain map
+        path_limit = 30
+        elevation = 'max'
+        controller = AStarController()
+        notificationHandler = NotificationHandler()
+        model = Model(terrain_map)  # Pass the terrain map to the model
+        model.add_observer(notificationHandler)
+        controller.set_route_model(model)
+        controller.set_start_location(start)
+        controller.set_end_location(destination)
+        controller.set_path_limit(path_limit)
+        controller.set_elevation_strategy(elevation)
+        
+        # Run the algorithm
+        controller.manipulate_route_model()
+        
+        # Ensure the algorithm indicates the absence of a valid path
+        json_output = json.loads(notificationHandler.get_output_json())
+        self.assertIsNone(json_output['elevation_path_distance'])
+        self.assertIsNone(json_output['elevation_path_gain'])
 
     # Checking the MVC architecture - Astar controller to Model
     def test_model_controller_astar(self):
@@ -245,7 +246,6 @@ def test_no_valid_path_due_to_terrain_constraints(self):
         controller.set_elevation_strategy(elevation)
         controller.manipulate_route_model()
         self.assertEqual(model.algorithm, DijkstraRoute)  # Used assertEqual instead of assert
-
 
 if __name__ == '__main__':
     unittest.main()
